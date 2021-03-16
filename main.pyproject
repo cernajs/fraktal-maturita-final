@@ -1,0 +1,3 @@
+{
+    "files": ["qml/strany/FinalSite.qml","qml/control/CustomButton.qml","qml/control/MinimizeBtn.qml","main.qml","qml/control/CloseBut.qml","qml/control/DownButtons.qml","qml/strany/ModelingGrowth.qml","qml/control/LeftMenuIcons.qml","qml/control/MaximizeBtn.qml","qml/control/Drop.qml","main.py","qml/strany/lSystemPage.qml","qml/control/Openbtn.qml","qml/textbubblee.qml"]
+}
