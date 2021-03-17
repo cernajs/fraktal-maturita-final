@@ -2,6 +2,6 @@
 
 run main.py to run app
 
-reequire : numpy
-           matplotlib
+reequire : numpy,
+           matplotlib,
            matplotlib-backend-qtquick
