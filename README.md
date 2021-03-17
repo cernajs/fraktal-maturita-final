@@ -4,4 +4,5 @@ run main.py to run app
 
 reequire : numpy,
            matplotlib,
-           matplotlib-backend-qtquick
+           matplotlib-backend-qtquick,
+           PyQt5
