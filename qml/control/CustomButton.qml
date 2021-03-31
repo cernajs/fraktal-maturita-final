@@ -39,7 +39,7 @@ Button {
         ColorOverlay {
             source: menuBtn
             anchors.fill: menuBtn
-            color: "#f5f0e1"
+            color: "#ffffff"
         }
     }
 }

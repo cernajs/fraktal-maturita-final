@@ -8,6 +8,7 @@ import "./qml/control"
 import Backend 1.0
 
 ApplicationWindow {
+    /*hlavní objekt ve kterém je celá aplikace rozložena*/
     id: main
     width: 1100
     height: 1000
@@ -17,14 +18,9 @@ ApplicationWindow {
     title: qsTr("FraktalEditor")
 
     flags: Qt.Window | Qt.FramelessWindowHint
-    /*
-    DragHandler {
-        onActiveChanged: if(active){
-                            main.startSystemMove()
-                         }
-    }
-    */
+
     Rectangle {
+        /*pozadí aplikace*/
         id: background
         color: "#ffffff"
         border.color: "#005474"
@@ -51,7 +47,7 @@ ApplicationWindow {
             anchors.topMargin: 3
 
             Rectangle {
-
+                /*umožňuje pohyb s aplikací*/
                 DragHandler {
                     onActiveChanged: if(active){
                                         main.startSystemMove()
@@ -71,6 +67,7 @@ ApplicationWindow {
 
 
                 CustomButton {
+                    /*tlačítko pro otevření hlavního menu*/
                     anchors.left: parent.left
                     anchors.right: title.left
                     anchors.top: parent.top
@@ -82,50 +79,7 @@ ApplicationWindow {
                 }
 
                 Rectangle {
-                    id: barUpDescription
-                    y: 37
-                    height: 25
-                    color: "#ffffff"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.rightMargin: 0
-                    anchors.leftMargin: 70
-                    anchors.bottomMargin: 0
-
-                    Label {
-                        id: upBarDesc
-                        color: "#999999"
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        verticalAlignment: Text.AlignVCenter
-                        font.pointSize: 10
-                        anchors.bottomMargin: 0
-                        anchors.rightMargin: 301
-                        anchors.leftMargin: 11
-                        anchors.topMargin: 0
-                    }
-
-                    Label {
-                        id: upBarDesc1
-                        color: "#999999"
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        horizontalAlignment: Text.AlignRight
-                        verticalAlignment: Text.AlignVCenter
-                        anchors.rightMargin: 8
-                        anchors.topMargin: 0
-                        font.pointSize: 10
-                        anchors.bottomMargin: 0
-                        anchors.leftMargin: 0
-                    }
-                }
-
-                Rectangle {
+                    /*horní lišta aplikace*/
                     id: title
                     height: 40
                     color: "#ffffff"
@@ -139,6 +93,7 @@ ApplicationWindow {
 
 
                     Image {
+                        /*obrázek aplikace v horní liště*/
                         id: image
                         width: 30
                         anchors.left: parent.left
@@ -152,6 +107,7 @@ ApplicationWindow {
                     }
 
                     Label {
+                        /*nadpis aplikace*/
                         id: label
                         color: "#1e3d59"
                         text: qsTr("Fraktal generator")
@@ -164,8 +120,16 @@ ApplicationWindow {
                         anchors.leftMargin: 5
                     }
                 }
+                /*
 
+
+
+                TLAČÍTKA PRO OVLÁDÁNÍ FRAKTÁLŮ
+
+
+                */
                 Row {
+                    /*řada v které jsou tlačítka pro ovládání aplikace*/
                     id: row
                     x: 867
                     width: 91
@@ -176,6 +140,7 @@ ApplicationWindow {
                     anchors.topMargin: 0
 
                     MinimizeBtn {
+                        /*tlačítko pro minimalizaci*/
                         id: minimizedB
                         anchors.top: parent.top
                         anchors.topMargin: 5
@@ -184,6 +149,7 @@ ApplicationWindow {
                     }
 
                     MaximizeBtn {
+                        /*tlačítko pro maximalizaci*/
                         id: maximizedB
                         anchors.top: parent.top
                         anchors.topMargin: 5
@@ -191,6 +157,7 @@ ApplicationWindow {
                     }
 
                     CloseBut {
+                        /*tlačítko pro zavření aplikace*/
                         id: closeB
                         anchors.top: parent.top
                         anchors.topMargin: 5
@@ -198,8 +165,18 @@ ApplicationWindow {
                     }
                 }
             }
+            /*
 
+
+
+            ZÁKLADNÍ L-SYSTÉM FRAKTÁLY
+
+
+
+            */
             Rectangle {
+                /*hlavní kontent aplikace
+                leží zde konkrétní volby fraktálů*/
                 id: cont
                 color: "#00198bd5"
                 anchors.left: parent.left
@@ -210,6 +187,7 @@ ApplicationWindow {
                 anchors.topMargin: 0
 
                 Rectangle {
+                    /*menu ve kterém se nachází možnosti základních l-systém fraktálů*/
                     id: morelsysopt
                     x: 55
                     y: 19
@@ -222,12 +200,13 @@ ApplicationWindow {
                     anchors.leftMargin: 200
                     anchors.topMargin: 0
 
-                    z: 12
+                    z: if(lMenu.width == 70) return -2; else return 14
                     transformOrigin: Item.Center
                     layer.smooth: false
                     antialiasing: false
 
                     PropertyAnimation {
+                        /*vysune menu se základníma l-systém fraktály*/
                         id: lsysanim
                         target: morelsysopt
                         property: "width"
@@ -237,6 +216,7 @@ ApplicationWindow {
                     }
 
                     LeftMenuIcons {
+                        /*tlačítko generující kochovu vločku*/
                         id: koch
                         x: 8
                         y: 0
@@ -245,10 +225,11 @@ ApplicationWindow {
                         visible: if(morelsysopt.width == 200) return true; else return false
                         text: qsTr("Koch Snowflake")
                         onClicked: {
-                            displayBridge.displayKoch(4);
+                            displayBridge.display_koch(4);
                         }
 
                         Openbtn {
+                            /*vysune slider pro výběr počtu iterací kochovy vločky*/
                             id: openKoch
                             x: 161
                             y: 21
@@ -260,6 +241,7 @@ ApplicationWindow {
                             }
 
                             PropertyAnimation {
+                                /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                 id: kochAnimOpen
                                 target: openKoch
                                 property: "rotation"
@@ -270,6 +252,7 @@ ApplicationWindow {
                     }
 
                     LeftMenuIcons {
+                        /*tlačítko generující hilbertovy křivky*/
                         id: hilbertCurve
                         x: 8
                         y: 56
@@ -279,10 +262,11 @@ ApplicationWindow {
                         text: qsTr("Hilbert Curve")
                         photoSource: "imgs/svg_icons/hilbertcurve.svg"
                         onClicked: {
-                            displayBridge.displayHilbert(4)
+                            displayBridge.display_hilbert(4)
                         }
 
                         Openbtn {
+                            /*vysune slider pro výběr počtu iterací hilbertovy křivky*/
                             id: openHilbert
                             x: 161
                             y: 21
@@ -294,6 +278,7 @@ ApplicationWindow {
                             }
 
                             PropertyAnimation {
+                                /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                 id: hilbertAnimOpen
                                 target: openHilbert
                                 property: "rotation"
@@ -304,6 +289,7 @@ ApplicationWindow {
                     }
 
                     LeftMenuIcons {
+                        /*tlačítko generující levyCCurve*/
                         id: levyCCurve
                         x: 8
                         y: 117
@@ -313,10 +299,11 @@ ApplicationWindow {
                         text: qsTr("levyCCurve")
                         photoSource: "imgs/svg_icons/Levy_C_Curve.svg"
                         onClicked: {
-                            displayBridge.displayLevyC(4)
+                            displayBridge.display_levyC(4)
                         }
 
                         Openbtn {
+                            /*vysune slider pro výběr počtu iterací levyCCurve*/
                             id: openLevyCurve
                             x: 161
                             y: 21
@@ -328,6 +315,7 @@ ApplicationWindow {
                             }
 
                             PropertyAnimation {
+                                /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                 id: levyAnimOpen
                                 target: openLevyCurve
                                 property: "rotation"
@@ -338,6 +326,7 @@ ApplicationWindow {
                     }
 
                     LeftMenuIcons {
+                        /*tlačítko generující segment 32 křivky*/
                         id: segment32Curve
                         x: 8
                         y: 178
@@ -347,10 +336,11 @@ ApplicationWindow {
                         text: qsTr("segment32Curve")
                         photoSource: "imgs/svg_icons/32segemnt.svg"
                         onClicked: {
-                            displayBridge.displaySegment32(2)
+                            displayBridge.display_segment32(2)
                         }
 
                         Openbtn {
+                            /*vysune slider pro výběr počtu iterací segment 32 křivky*/
                             id: openSegment32
                             x: 161
                             y: 21
@@ -362,6 +352,7 @@ ApplicationWindow {
                             }
 
                             PropertyAnimation {
+                                /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                 id: segment32Open
                                 target: openSegment32
                                 property: "rotation"
@@ -372,6 +363,7 @@ ApplicationWindow {
                     }
 
                     LeftMenuIcons {
+                        /*tlačítko generující dračí křivky*/
                         id: dragonCurve
                         x: 8
                         y: 239
@@ -381,10 +373,11 @@ ApplicationWindow {
                         text: qsTr("dragonCurve")
                         photoSource: "imgs/svg_icons/Dragon_Curve.svg"
                         onClicked: {
-                            displayBridge.displayDragon(4)
+                            displayBridge.display_dragon(4)
                         }
 
                         Openbtn {
+                            /*vysune slider pro výběr počtu iterací dračí křivky*/
                             id: openDragon
                             x: 161
                             y: 21
@@ -396,6 +389,7 @@ ApplicationWindow {
                             }
 
                             PropertyAnimation {
+                                /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                 id: dragonCurveOpen
                                 target: openDragon
                                 property: "rotation"
@@ -406,6 +400,7 @@ ApplicationWindow {
                     }
 
                     LeftMenuIcons {
+                        /*tlačítko generující siepinskiho trojuhelník*/
                         id: siepinskiSieve
                         x: 8
                         y: 287
@@ -415,10 +410,11 @@ ApplicationWindow {
                         text: qsTr("siepinskiSieve")
                         photoSource: "imgs/svg_icons/Sierpinski_triangle.svg"
                         onClicked: {
-                            displayBridge.displaySiepinski(10)
+                            displayBridge.display_siepinski(10)
                         }
 
                         Openbtn {
+                            /*vysune slider pro výběr počtu iterací siepinskiho trojuhelníku*/
                             id: openSiepinski
                             x: 161
                             y: 21
@@ -430,6 +426,7 @@ ApplicationWindow {
                             }
 
                             PropertyAnimation {
+                                /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                 id: siepinskiOpen
                                 target: openSiepinski
                                 property: "rotation"
@@ -440,8 +437,17 @@ ApplicationWindow {
                     }
 
                 }
+                /*
 
+
+
+                LEVÉ MENU APLIKACE
+
+
+
+                */
                 Rectangle {
+                    /*levé menu aplikace ve kterém se nachízejí základní volby fraktálů*/
                     id: lMenu
                     width: 70
                     color: "#1e3d59"
@@ -454,6 +460,7 @@ ApplicationWindow {
                     anchors.topMargin: 0
 
                     PropertyAnimation {
+                        /*vysune leevé menu ze zkrácené verze na větší*/
                         id: anim
                         target: lMenu
                         property: "width"
@@ -463,6 +470,7 @@ ApplicationWindow {
                     }
 
                     Column {
+                        /*sloupec držící volby fraktálů*/
                         id: column
                         width: 70
                         anchors.left: parent.left
@@ -475,93 +483,50 @@ ApplicationWindow {
                         anchors.topMargin: 0
 
                         LeftMenuIcons {
+                            /*otevře konkrétní možnosti generování l-systém fraktálů*/
                             id: lsys
                             text: "L-System"
                             clip: false
-
-                            Openbtn {
-
-                                id: lsysactions
-                                x: 164
-                                y: 21
-                                width: 14
-                                height: 14
-                                clip: false
-                                onClicked: {
-                                    lsysAnimOpen.running = true
-                                    lsysanim.running = true
-                                    morelsysopt.z = 11
-                                   }
-                                PropertyAnimation {
-                                    id: lsysAnimOpen
-                                    target: lsysactions
-                                    property: "rotation"
-                                    to: if(morelsysopt.width == 0) return 45; else return 180
-                                    duration: 150
-                                }
-                            }
+                            onClicked: {
+                                lsysanim.running = true
+                               }
                         }
 
                         LeftMenuIcons {
+                            /*otevře konkrétní možnosti generování l-systém growth fraktálů*/
                             id: growth
                             visible: true
                             text: qsTr("Growth")
                             photoSource: "./imgs/svg_icons/growth.svg"
                             clip: false
-
-                            Openbtn {
-                                id: growthactions
-                                x: 164
-                                y: 21
-                                width: 14
-                                height: 14
-                                onClicked: {
-                                    growthAnimOpen.running = true
-                                    growthanim.running = true
-                                }
-
-                                PropertyAnimation {
-                                    id: growthAnimOpen
-                                    target: growthactions
-                                    property: "rotation"
-                                    duration: 150
-                                    to: if(growthopt.width == 0) return 45; else return 180
-                                }
-                                clip: false
+                            onClicked: {
+                                growthanim.running = true
                             }
                         }
 
                         LeftMenuIcons {
+                            /*otevře konkrétní možnosti generování TEA fraktálů*/
                             id: complex
                             text: qsTr("Complex fractals")
                             photoSource: "imgs/svg_icons/julia.svg"
                             clip: false
-
-                            Openbtn {
-                                id: complexactions
-                                x: 164
-                                y: 21
-                                width: 14
-                                height: 14
-                                onClicked: {
-                                    complexAnimOpen.running = true
-                                    complexanim.running = true
-                                }
-                                PropertyAnimation {
-                                    id: complexAnimOpen
-                                    target: complexactions
-                                    property: "rotation"
-                                    duration: 150
-                                    to: if(complexopt.width == 0) return 45; else return 180
-                                }
-                                clip: false
+                            onClicked: {
+                                complexanim.running = true
                             }
                         }
-
                     }
                 }
+                /*
 
+
+
+               HLAVNÍ OKNO APLIKACE
+
+
+
+                */
                 Rectangle {
+                    /*halvní kontent obsahující canvas pro tovrbu fraktálů a slidery na modifikaci iterací*/
                     id: mainContent
                     color: "#f5f0e1"
                     anchors.left: lMenu.right
@@ -576,14 +541,24 @@ ApplicationWindow {
                     anchors.topMargin: 0
 
                         FigureCanvas {
+                            /*canvas pro generování fraktálů*/
                             anchors.fill: parent
                             id: mplView
                             objectName : "figure"
                             dpi_ratio: Screen.devicePixelRatio
                             width : 200
                         }
+                        /*
 
+
+
+                        SLIDERY VŠECH FRAKTÁLŮ
+
+
+
+                        */
                         Slider {
+                            /*slider na modifikaci počtu iterací kochovy vločky*/
                             id: kochSlider
                             x: 235
                             y: 8
@@ -593,10 +568,11 @@ ApplicationWindow {
                             stepSize: 1
                             to: 10
                             onValueChanged: {
-                                displayBridge.displayKoch(value)
+                                displayBridge.display_koch(value)
                             }
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: kochSliderAnim
                                 target: kochSlider
                                 property: "width"
@@ -608,6 +584,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací hilbertovy křivky*/
                             id: hilbertSlider
                             x: 235
                             y: 66
@@ -617,10 +594,11 @@ ApplicationWindow {
                             stepSize: 1
                             to: 6
                             onValueChanged: {
-                                displayBridge.displayHilbert(value)
+                                displayBridge.display_hilbert(value)
                             }
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: hilbertSliderAnim
                                 target: hilbertSlider
                                 property: "width"
@@ -631,6 +609,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací levyCCurve*/
                             id: levyCCurveSlider
                             x: 235
                             y: 124
@@ -638,11 +617,12 @@ ApplicationWindow {
                             visible: if(levyCCurveSlider.width > 50) return true; else return false;
                             stepSize: 1
                             onValueChanged: {
-                                displayBridge.displayLevyC(value)
+                                displayBridge.display_levyC(value)
                             }
 
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: levyCCurveAnim
                                 target: levyCCurveSlider
                                 property: "width"
@@ -655,6 +635,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací segment 32 křivky*/
                             id: segment32Slider
                             x: 235
                             y: 192
@@ -662,11 +643,12 @@ ApplicationWindow {
                             visible: if(segment32Slider.width > 50) return true; else return false;
                             stepSize: 1
                             onValueChanged: {
-                                displayBridge.displaySegment32(value)
+                                displayBridge.display_segment32(value)
                             }
 
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: segment32Anim
                                 target: segment32Slider
                                 property: "width"
@@ -679,6 +661,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací dračí křivky*/
                             id: dragonCurveSlider
                             x: 235
                             y: 249
@@ -686,11 +669,12 @@ ApplicationWindow {
                             visible: if(dragonCurveSlider.width > 50) return true; else return false;
                             stepSize: 1
                             onValueChanged: {
-                                displayBridge.displayDragon(value)
+                                displayBridge.display_dragon(value)
                             }
 
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: dragonCurveAnim
                                 target: dragonCurveSlider
                                 property: "width"
@@ -703,6 +687,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací siepinskiho trojuhelníku*/
                             id: siepinskiSlider
                             x: 235
                             y: 311
@@ -710,10 +695,11 @@ ApplicationWindow {
                             visible: if(siepinskiSlider.width > 50) return true; else return false;
                             stepSize: 1
                             onValueChanged: {
-                                displayBridge.displaySiepinski(value)
+                                displayBridge.display_siepinski(value)
                             }
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: siepinskiAnim
                                 target: siepinskiSlider
                                 property: "width"
@@ -726,6 +712,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací bush1 growth fraktálu*/
                             id: bush1Slider
                             x: 211
                             y: 66
@@ -735,10 +722,11 @@ ApplicationWindow {
                             width: if(growthopt.width == 0) return 0; else return 0
                             visible: if(bush1Slider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayBush1(value)
+                                displayBridge.display_bush1(value)
                             }
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: bush1Anim
                                 target: bush1Slider
                                 property: "width"
@@ -749,6 +737,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací stick growth fraktálu*/
                             id: stickSlider
                             x: 211
                             y: 129
@@ -758,10 +747,11 @@ ApplicationWindow {
                             width: if(growthopt.width == 0) return 0; else return 0
                             visible: if(stickSlider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayStick(value)
+                                displayBridge.display_stick(value)
                             }
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: stickAnim
                                 target: stickSlider
                                 property: "width"
@@ -772,6 +762,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací bush2 growth fraktálu*/
                             id: bush2Slider
                             x: 211
                             y: 182
@@ -781,10 +772,11 @@ ApplicationWindow {
                             width: if(growthopt.width == 0) return 0; else return 0
                             visible: if(bush2Slider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayBush2(value)
+                                displayBridge.display_bush2(value)
                             }
 
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: bush2Anim
                                 target: bush2Slider
                                 property: "width"
@@ -795,6 +787,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací bush3 growth fraktálu*/
                             id: bush3Slider
                             x: 211
                             y: 238
@@ -804,9 +797,10 @@ ApplicationWindow {
                             width: if(growthopt.width == 0) return 0; else return 0
                             visible: if(bush3Slider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayBush3(value)
+                                displayBridge.display_bush3(value)
                             }
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: bush3Anim
                                 target: bush3Slider
                                 property: "width"
@@ -818,6 +812,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací stick2 growth fraktálu*/
                             id: stick2Slider
                             x: 211
                             y: 295
@@ -827,9 +822,10 @@ ApplicationWindow {
                             width: if(growthopt.width == 0) return 0; else return 0
                             visible: if(stick2Slider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayStick2(value)
+                                displayBridge.display_stick2(value)
                             }
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: stick2Anim
                                 target: stick2Slider
                                 property: "width"
@@ -840,6 +836,7 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací algae growth fraktálu*/
                             id: algaeSlider
                             x: 211
                             y: 351
@@ -849,9 +846,10 @@ ApplicationWindow {
                             width: if(growthopt.width == 0) return 0; else return 0
                             visible: if(algaeSlider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayAlgae(value)
+                                displayBridge.display_algae(value)
                             }
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: algaeAnim
                                 target: algaeSlider
                                 property: "width"
@@ -862,8 +860,9 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací mandelbrotovy množiny*/
                             id: mandSlider
-                            x: 193
+                            x: 211
                             y: 124
                             value: 10
                             to: 1000
@@ -871,9 +870,10 @@ ApplicationWindow {
                             width: if(complexopt.width == 0) return 0; else return 0
                             visible: if(mandSlider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayMand(value)
+                                displayBridge.display_mand(value)
                             }
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: mandAnim
                                 target: mandSlider
                                 property: "width"
@@ -884,8 +884,9 @@ ApplicationWindow {
                         }
 
                         Slider {
+                            /*slider na modifikaci počtu iterací juliovy množiny*/
                             id: juliaSlider
-                            x: 193
+                            x: 211
                             y: 192
                             value: 100
                             to: 1000
@@ -893,9 +894,10 @@ ApplicationWindow {
                             width: if(complexopt.width == 0) return 0; else return 0
                             visible: if(juliaSlider.width > 50) return true; else return false;
                             onValueChanged: {
-                                displayBridge.displayJulia(value)
+                                displayBridge.display_julia(value)
                             }
                             PropertyAnimation {
+                                /*animace vysunutí slideru*/
                                 id: juliaAnim
                                 target: juliaSlider
                                 property: "width"
@@ -907,17 +909,27 @@ ApplicationWindow {
 
 
                 }
+                     /*
 
+
+
+                     GROWTH L-SYSTÉM FRAKTÁLY
+
+
+
+                    */
                     Rectangle {
+                        /*menu obsahující growth l-systém fraktály*/
                         id: growthopt
                         x: 200
                         y: 55
-                        width: 0
+                        width: if(lMenu.width == 70) return 0; else return 0;
                         height: 347
                         color: "#1e3d59"
-                        z: 10
+                        z: if(lMenu.width == 70) return -2; else return 14
 
                         PropertyAnimation {
+                            /*rozšíří menu s growth l-systém fraktály*/
                             id: growthanim
                             target: growthopt
                             property: "width"
@@ -927,6 +939,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující bush1 fraktál*/
                             id: bush1
                             x: 8
                             y: 0
@@ -936,10 +949,11 @@ ApplicationWindow {
                             text: qsTr("Bush 1")
                             photoSource: "imgs/svg_icons/bush1.svg"
                             onClicked: {
-                                displayBridge.displayBush1(2);
+                                displayBridge.display_bush1(2);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: bush1Open
                                 x: 161
                                 y: 21
@@ -951,6 +965,7 @@ ApplicationWindow {
                                 }
 
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: bush1AnimOpen
                                     target: bush1Open
                                     property: "rotation"
@@ -961,6 +976,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující stick fraktál*/
                             id: stick
                             x: 8
                             y: 61
@@ -970,10 +986,11 @@ ApplicationWindow {
                             text: qsTr("Stick")
                             photoSource: "imgs/svg_icons/stick.svg"
                             onClicked: {
-                                displayBridge.displayStick(2);
+                                displayBridge.display_stick(2);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: stickOpen
                                 x: 161
                                 y: 21
@@ -985,6 +1002,7 @@ ApplicationWindow {
                                 }
 
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: stickAnimOpen
                                     target: stickOpen
                                     property: "rotation"
@@ -996,6 +1014,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující bush2 fraktál*/
                             id: bush2
                             x: 8
                             y: 115
@@ -1005,10 +1024,11 @@ ApplicationWindow {
                             text: qsTr("Bush 2")
                             photoSource: "imgs/svg_icons/bush2.svg"
                             onClicked: {
-                                displayBridge.displayBush2(2);
+                                displayBridge.display_bush2(2);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: bush2Open
                                 x: 161
                                 y: 21
@@ -1020,6 +1040,7 @@ ApplicationWindow {
                                 }
 
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: bush2AnimOpen
                                     target: bush2Open
                                     property: "rotation"
@@ -1031,6 +1052,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující bush3 fraktál*/
                             id: bush3
                             x: 8
                             y: 170
@@ -1040,10 +1062,11 @@ ApplicationWindow {
                             text: qsTr("Bush 3")
                             photoSource: "imgs/svg_icons/bush3.svg"
                             onClicked: {
-                                displayBridge.displayBush3(2);
+                                displayBridge.display_bush3(2);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: bush3Open
                                 x: 161
                                 y: 21
@@ -1054,6 +1077,7 @@ ApplicationWindow {
                                     bush3AnimOpen.running = true
                                 }
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: bush3AnimOpen
                                     target: bush3Open
                                     property: "rotation"
@@ -1064,6 +1088,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující stick2 fraktál*/
                             id: stick2
                             x: 8
                             y: 231
@@ -1073,10 +1098,11 @@ ApplicationWindow {
                             text: qsTr("Stick 2")
                             photoSource: "imgs/svg_icons/sticks2.svg"
                             onClicked: {
-                                displayBridge.displayStick2(2);
+                                displayBridge.display_stick2(2);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: stick2Open
                                 x: 161
                                 y: 21
@@ -1088,6 +1114,7 @@ ApplicationWindow {
                                 }
 
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: stick2AnimOpen
                                     target: stick2Open
                                     property: "rotation"
@@ -1098,6 +1125,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující algae fraktál*/
                             id: algae
                             x: 8
                             y: 284
@@ -1107,9 +1135,10 @@ ApplicationWindow {
                             text: qsTr("Algae")
                             photoSource: "imgs/svg_icons/algae.svg"
                             onClicked: {
-                                displayBridge.displayAlgae(2);
+                                displayBridge.display_algae(2);
                             }
                             Openbtn {
+                                /*vysune slider*/
                                 id: openAlgae
                                 x: 161
                                 y: 21
@@ -1120,6 +1149,7 @@ ApplicationWindow {
                                     algaeAnimOpen.running = true
                                 }
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: algaeAnimOpen
                                     target: openAlgae
                                     property: "rotation"
@@ -1129,17 +1159,26 @@ ApplicationWindow {
                             }
                         }
                     }
+                    /*
 
+
+
+                    KOMPLEXNÍ FRAKTÁLY
+
+
+
+                    */
                     Rectangle {
                         id: complexopt
                         x: 200
                         y: 110
-                        width: 0
+                        width: if(lMenu.width == 70) return 0; else return 0;
                         height: 137
                         color: "#1e3d59"
-                        z: 10
+                        z: if(lMenu.width == 70) return -2; else return 14
 
                         PropertyAnimation {
+                            /*rozšíří menu s komplexními fraktály*/
                             id: complexanim
                             target: complexopt
                             property: "width"
@@ -1149,6 +1188,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující mandelbrotovu množinu*/
                             id: mandelbrot
                             x: 0
                             y: 8
@@ -1158,10 +1198,11 @@ ApplicationWindow {
                             text: qsTr("Mandelbrot")
                             photoSource: "imgs/svg_icons/mand.svg"
                             onClicked: {
-                                displayBridge.displayMand(100);
+                                displayBridge.display_mand(100);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: openMandel
                                 x: 161
                                 y: 21
@@ -1174,6 +1215,7 @@ ApplicationWindow {
                                 }
 
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: mandOpen
                                     target: openMandel
                                     property: "rotation"
@@ -1184,6 +1226,7 @@ ApplicationWindow {
                         }
 
                         LeftMenuIcons {
+                            /*tlačítko generující juliovu množinu*/
                             id: julia
                             x: 0
                             y: 74
@@ -1194,10 +1237,11 @@ ApplicationWindow {
                             photoSource: "imgs/svg_icons/julia.svg"
                             z: 0
                             onClicked: {
-                                displayBridge.displayJulia(1000);
+                                displayBridge.display_julia(1000);
                             }
 
                             Openbtn {
+                                /*vysune slider*/
                                 id: openJulia
                                 x: 161
                                 y: 21
@@ -1209,6 +1253,7 @@ ApplicationWindow {
 
                                 }
                                 PropertyAnimation {
+                                    /*promění + na x podle toho, jestli je slider otevřený nebo zavřený*/
                                     id: juliaOpen
                                     target: openJulia
                                     property: "rotation"
@@ -1220,16 +1265,19 @@ ApplicationWindow {
                     }
 
 
-/*
-                    StackView {
-                        id: stackView
-                        anchors.fill: parent
-                        z: 0
-                        initialItem: Qt.resolvedUrl("./qml/strany/lSystemPage.qml")
-                    }*/
-                }
 
+                }
+                /*
+
+
+
+                TOOLBAR
+
+
+
+                */
                 Rectangle {
+                    /*menu pro ToolBar v dolní části aplikace*/
                     id: rectangle
                     color: "#f5f0e1"
                     anchors.left: lMenu.right
@@ -1247,6 +1295,8 @@ ApplicationWindow {
                         y: -40
                         width: 1003
                         height: 40
+                        anchors.right: parent.horizontalCenter
+                        anchors.rightMargin: 0
                         z: 12
 
 
@@ -1266,7 +1316,7 @@ ApplicationWindow {
                             }
 
                             DownButtons {
-
+                                /*vrátí úpravu zpět*/
                                 text: qsTr("back")
                                 photoSource: "imgs/svg_icons/back.svg"
                                 onClicked: {
@@ -1275,6 +1325,7 @@ ApplicationWindow {
                             }
 
                             DownButtons {
+                                /*vrátí předešlou úpravu grafu*/
                                 visible: true
                                 text: qsTr("forward")
                                 photoSource: "imgs/svg_icons/forward.svg"
@@ -1286,6 +1337,7 @@ ApplicationWindow {
                             /*ToolSeparator{}*/
 
                             DownButtons {
+                                /*tlačítko pro posunutí fraktálů*/
                                 id: pan
                                 text: qsTr("pan")
                                 photoSource: "imgs/svg_icons/move.svg"
@@ -1299,6 +1351,7 @@ ApplicationWindow {
                             }
 
                             DownButtons {
+                                /*tlačítko pro zoom fraktálu*/
                                 id: zoom
                                 text: qsTr("zoom")
                                 photoSource: "imgs/svg_icons/zoom_to_rect.svg"
@@ -1313,6 +1366,7 @@ ApplicationWindow {
                             }
                             ToolSeparator {}
                             TextInput {
+                                /*souřadnice kurzoru*/
                                 id: location
                                 readOnly: true
                                 text: displayBridge.coordinates
@@ -1327,6 +1381,8 @@ ApplicationWindow {
             }
         }
     }
+
+
 
 
 

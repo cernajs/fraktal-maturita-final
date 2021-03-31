@@ -1,3 +1,7 @@
+"""
+REQUIRE : MATPLOTLIB, MATPLOTLIB_BACKEND_QTQUICK ,PYQT5, NUMPY
+"""
+
 # This Python file uses the following encoding: utf-8
 import sys
 import os
@@ -5,27 +9,35 @@ import os
 #PATH FOR QML LOAD
 from pathlib import Path
 
-#FIRT WINDOW FRACTALS
-from basiclsys.kochSnowflake import *
-from basiclsys.hilbertCurve import *
-from basiclsys.levyCCurve import *
-from basiclsys.segment32 import *
-from basiclsys.dragonCurve import *
-from basiclsys.siepinskiCurve import *
-#
-#
-#GROWTH
-from growth.bush1 import *
-from growth.stick import *
-from growth.bush2 import *
-from growth.bush3 import *
-from growth.stick2 import *
-from growth.algae import *
-#
-#
-#COMPLEX
-from complex.mand import *
-from complex.julia import *
+"""
+
+l-system fractals
+
+"""
+from basiclsys.kochSnowflake import koch
+from basiclsys.hilbertCurve import hilbert
+from basiclsys.levyCCurve import levy
+from basiclsys.segment32 import segment32
+from basiclsys.dragonCurve import dragon
+from basiclsys.siepinskiCurve import siepinski
+"""
+
+growth-fractals
+
+"""
+from growth.bush1 import bush1
+from growth.stick import stick
+from growth.bush2 import bush2
+from growth.bush3 import bush3
+from growth.stick2 import stick2
+from growth.algae import algae
+"""
+
+complex fractals
+
+"""
+from complex.mand import mand
+from complex.julia import julia
 
 #MATPLOTLIB BACKEND
 from matplotlib_backend_qtquick.backend_qtquick import (
@@ -34,27 +46,33 @@ from matplotlib_backend_qtquick.backend_qtquickagg import (
     FigureCanvasQtQuickAgg)
 from matplotlib_backend_qtquick.qt_compat import QtGui, QtQml, QtCore
 
-#CONVERTING ANGLE TO RADIANS 
-from math import pi, cos, sin
-
 
 #MAINCLASS
 class DisplayBridge(QtCore.QObject):
+    """
+    Hlavní třída pro propojení pythonu s qml
+    Inicializuje canvas, dokáže ho updatovat
+    Vytváří toolbar pro ovládání grafu
+    """
 
-    coordinatesChanged = QtCore.Signal(str)
+    coordinates_change = QtCore.Signal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
         #FIGURE
         self.figure = None
+        
         #TOOLBAR
         self.toolbar = None
 
         #MOUSE COORDS
         self._coordinates = ""
 
-    def updateWithCanvas(self, canvas):
+    def update_canvas(self, canvas):
+        """
+        Vytvoří prvotní canvas při spuštění programu
+        """
 
         self.figure = canvas.figure
         self.toolbar = NavigationToolbar2QtQuick(canvas=canvas)
@@ -77,7 +95,11 @@ class DisplayBridge(QtCore.QObject):
     #
     #
     #CHANGE FRACTAL PLOT L-SYSTEM
-    def changeFigure(self,fractal,a):
+    def change_figure(self,fractal,a):
+        """
+        Dostane jako argument fraktal:fractal a počet iterací:a
+        Aktualizuje canvas s nový fraktálem se zadaným počtem iterací
+        """
         win = engine.rootObjects()[0]
         canvas = win.findChild(QtCore.QObject, "figure")
         self.figure = canvas.figure
@@ -91,10 +113,16 @@ class DisplayBridge(QtCore.QObject):
         self.axes.plot(x, y)
         canvas.draw_idle()
 
-    #
-    #
-    #CHANGE FRACTAL PLOT COMPLEX
-    def changeFigureComplex(self,fractal,n):
+    """
+
+    ZMĚNÍ 
+
+    """
+    def change_figure_complex(self,fractal,n):
+        """
+        Dostane jako argument kompexní fraktal:fractal a počet iterací:a
+        Aktualizuje canvas s nový fraktálem se zadaným počtem iterací
+        """
         win = engine.rootObjects()[0]
         canvas = win.findChild(QtCore.QObject, "figure")
         self.figure = canvas.figure
@@ -105,186 +133,203 @@ class DisplayBridge(QtCore.QObject):
         img = fractal(n=n)
 
         self.axes.cla()
-        self.axes.imshow(img, cmap="plasma")
+        self.axes.imshow(img, cmap="nipy_spectral")
         canvas.draw_idle()
 
 
-    #
-    #
-    #L-SYSTEM-FRACTALS
-    #
-    #
-    def changeFigKoch(self, a):
-        self.changeFigure(koch,a)
+    """
 
-    def changeFigHilbert(self,a):
-        self.changeFigure(hilbert,a)
+    L-SYSTEM
 
-    def changeFigLevy(self,a):
-        self.changeFigure(levy,a)
+    Následující funkce propojí funkci pro aktualizaci canvasu
+    s obecnou funkcí pro změnu figury:change_figure
 
-    def changeFigSegment32(self,a):
-        self.changeFigure(segment32,a)
+    """
+    def change_fig_koch(self, a):
+        self.change_figure(koch,a)
 
-    def changeFigDragon(self,a):
-        self.changeFigure(dragon,a)
+    def change_fig_hilbert(self,a):
+        self.change_figure(hilbert,a)
 
-    def changeFigSiepinski(self,a):
-        self.changeFigure(siepinski,a)
-    #
-    #
-    #GROWTH
-    #
-    #
-    def changeFigBush1(self,a):
-        self.changeFigure(bush1,a)
+    def change_fig_levy(self,a):
+        self.change_figure(levy,a)
 
-    def changeFigStick(self,a):
-        self.changeFigure(stick,a)
+    def change_fig_segment32(self,a):
+        self.change_figure(segment32,a)
 
-    def changeFigBush2(self,a):
-        self.changeFigure(bush2,a)
+    def change_fig_dragon(self,a):
+        self.change_figure(dragon,a)
 
-    def changeFigBush3(self,a):
-        self.changeFigure(bush3,a)
+    def change_fig_siepinski(self,a):
+        self.change_figure(siepinski,a)
+    """
 
-    def changeFigStick2(self,a):
-        self.changeFigure(stick2,a)
+    GROWTH
 
-    def changeFigAlgae(self,a):
-        self.changeFigure(algae,a)
-    #
-    #
-    #COMPLEX
-    #
-    #
-    def changeFigMandel(self,a):
-        self.changeFigureComplex(mand,a)
+    Následující funkce propojí funkci pro aktualizaci canvasu
+    s obecnou funkcí pro změnu figury:change_figure
 
-    def changeFigJulia(self,a):
-        self.changeFigureComplex(julia,a)
+    """
+    def change_fig_bush1(self,a):
+        self.change_figure(bush1,a)
 
-    #
-    #
-    #
-    #
-    # COORDINATES
-    #
-    #
-    def getCoordinates(self):
+    def change_fig_stick(self,a):
+        self.change_figure(stick,a)
+
+    def change_fig_bush2(self,a):
+        self.change_figure(bush2,a)
+
+    def change_fig_bush3(self,a):
+        self.change_figure(bush3,a)
+
+    def change_fig_stick2(self,a):
+        self.change_figure(stick2,a)
+
+    def change_fig_algae(self,a):
+        self.change_figure(algae,a)
+    """
+    
+    COMPLEX
+
+    Následující funkce propojí funkci pro aktualizaci canvasu
+    s obecnou funkcí pro změnu figury:change_figure_complex
+
+    """
+    def change_fig_mandel(self,a):
+        self.change_figure_complex(mand,a)
+
+    def change_fig_julia(self,a):
+        self.change_figure_complex(julia,a)
+
+    """
+
+    COORDINATES
+
+
+    """
+    def get_coordinates(self):
+        """vrátí aktuální souřadnice kurzoru"""
         return self._coordinates
 
-    def setCoordinates(self, coordinates):
+    def set_coordinates(self, coordinates):
+        """aktualizuje hodnotu souřadnic"""
         self._coordinates = coordinates
-        self.coordinatesChanged.emit(self._coordinates)
+        self.coordinates_change.emit(self._coordinates)
 
-    coordinates = QtCore.Property(str, getCoordinates, setCoordinates,
-                                  notify=coordinatesChanged)
-    #
-    #
-    #TOOLBAR
-    #
-    #
+    coordinates = QtCore.Property(str, get_coordinates, set_coordinates,
+                                  notify=coordinates_change)
+    """
+
+    TOOLBAR
+
+    """
     @QtCore.Slot()
     def pan(self, *args):
-
+        """Propojí pan v toolbaru v qml s pythonem"""
         self.toolbar.pan(*args)
 
     @QtCore.Slot()
     def zoom(self, *args):
-
+        """Propojí zoom v toolbaru v qml s pythonem"""
         self.toolbar.zoom(*args)
 
     @QtCore.Slot()
     def home(self, *args):
+        """Propojí home button v toolbaru v qml s pythonem"""
         self.toolbar.home(*args)
 
     @QtCore.Slot()
     def back(self, *args):
+        """Propojí back button v toolbaru v qml s pythonem"""
         self.toolbar.back(*args)
 
     @QtCore.Slot()
     def forward(self, *args):
+        """Propojí forward button v toolbaru v qml s pythonem"""
         self.toolbar.forward(*args)
-    #
-    #
+    """
+    L-SYS SLOTS
 
-    #L-SYS SLOTS
-    #
-    #
-    #
-    #
-    @QtCore.Slot(int)
-    def displayKoch(self,a):
-        self.changeFigKoch(a)
+    Následující funkce propojí tlačítko a slider v qml
+    s python backend funkcí pro generaci určitého fraktálu 
 
+    """
     @QtCore.Slot(int)
-    def displayHilbert(self,a):
-        self.changeFigHilbert(a)
+    def display_koch(self,a):
+        self.change_fig_koch(a)
 
     @QtCore.Slot(int)
-    def displayLevyC(self,a):
-        self.changeFigLevy(a)
+    def display_hilbert(self,a):
+        self.change_fig_hilbert(a)
 
     @QtCore.Slot(int)
-    def displaySegment32(self,a):
-        self.changeFigSegment32(a)
+    def display_levyC(self,a):
+        self.change_fig_levy(a)
 
     @QtCore.Slot(int)
-    def displayDragon(self,a):
-        self.changeFigDragon(a)
+    def display_segment32(self,a):
+        self.change_fig_segment32(a)
 
     @QtCore.Slot(int)
-    def displaySiepinski(self,a):
-        self.changeFigSiepinski(a)
-    #
-    #
-    #GROWTH SLOTS
-    #
-    #
-    #
-    @QtCore.Slot(int)
-    def displayBush1(self,a):
-        self.changeFigBush1(a)
+    def display_dragon(self,a):
+        self.change_fig_dragon(a)
 
     @QtCore.Slot(int)
-    def displayStick(self,a):
-        self.changeFigStick(a)
+    def display_siepinski(self,a):
+        self.change_fig_siepinski(a)
+    """
+    
+    GROWTH SLOTS
+    
+    Následující funkce propojí tlačítko a slider v qml
+    s python backend funkcí pro generaci určitého fraktálu 
+    
+    """
+    @QtCore.Slot(int)
+    def display_bush1(self,a):
+        self.change_fig_bush1(a)
 
     @QtCore.Slot(int)
-    def displayBush2(self,a):
-        self.changeFigBush2(a)
+    def display_stick(self,a):
+        self.change_fig_stick(a)
 
     @QtCore.Slot(int)
-    def displayBush3(self,a):
-        self.changeFigBush3(a)
+    def display_bush2(self,a):
+        self.change_fig_bush2(a)
 
     @QtCore.Slot(int)
-    def displayStick2(self,a):
-        self.changeFigStick2(a)
+    def display_bush3(self,a):
+        self.change_fig_bush3(a)
 
     @QtCore.Slot(int)
-    def displayAlgae(self,a):
-        self.changeFigAlgae(a)
-
-    #
-    #
-    #COMPLEX
-    #
-    #
-    @QtCore.Slot(int)
-    def displayMand(self,a):
-        self.changeFigMandel(a)
+    def display_stick2(self,a):
+        self.change_fig_stick2(a)
 
     @QtCore.Slot(int)
-    def displayJulia(self,a):
-        self.changeFigJulia(a)
+    def display_algae(self,a):
+        self.change_fig_algae(a)
 
-    #
-    #
-    #
+    """
+    
+    COMPLEX
+
+    Následující funkce propojí tlačítko a slider v qml
+    s python backend funkcí pro generaci určitého fraktálu 
+    
+    """
+    @QtCore.Slot(int)
+    def display_mand(self,a):
+        self.change_fig_mandel(a)
+
+    @QtCore.Slot(int)
+    def display_julia(self,a):
+        self.change_fig_julia(a)
+
+    """
 
 
+
+    """
 
     def on_motion(self, event):
         if event.inaxes == self.axes:
@@ -313,7 +358,7 @@ if __name__ == "__main__":
     engine.load(QtCore.QUrl.fromLocalFile(str(qmlFile)))
 
     win = engine.rootObjects()[0]
-    displayBridge.updateWithCanvas(win.findChild(QtCore.QObject, "figure"))
+    displayBridge.update_canvas(win.findChild(QtCore.QObject, "figure"))
 
     app.exec_()
 

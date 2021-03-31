@@ -1,6 +1,7 @@
-from growth.parentClass import *
+from growth.parentClass import plotGrowth
 
 def algae(a):
+	"""vrátí souřadnice pro algae fraktál po a iteracích"""
 	algae = plotGrowth('aF',
  {"a":"FFFFFy[++++n][----t]fb",
  'b': '+FFFFFy[++++n][----t]fc',
